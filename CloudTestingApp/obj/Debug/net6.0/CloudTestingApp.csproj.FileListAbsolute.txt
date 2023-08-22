@@ -67,3 +67,4 @@ C:\Projects\CloudNine\CloudTestingApp\obj\Debug\net6.0\refint\CloudTestingApp.dl
 C:\Projects\CloudNine\CloudTestingApp\obj\Debug\net6.0\CloudTestingApp.pdb
 C:\Projects\CloudNine\CloudTestingApp\obj\Debug\net6.0\CloudTestingApp.genruntimeconfig.cache
 C:\Projects\CloudNine\CloudTestingApp\obj\Debug\net6.0\ref\CloudTestingApp.dll
+C:\Projects\CloudNine\CloudTestingApp\bin\Debug\net6.0\CloudTestingApp.staticwebassets.runtime.json

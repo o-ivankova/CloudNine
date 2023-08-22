@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using System.ComponentModel;
 using Container = Microsoft.Azure.Cosmos.Container;
 
 namespace CloudTestingApp.Controllers
@@ -21,13 +20,13 @@ namespace CloudTestingApp.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<string> AddOrReplaceItem(ToDoItem item)
+        public async Task<string> AddOrReplaceItem(ToDoItemModel item)
         {
             var container = await GetContainer();
 
-            item.Id ??= Guid.NewGuid().ToString();
+            item.Id = Guid.NewGuid().ToString();
 
-            var upsertedItem = await container.UpsertItemAsync<ToDoItem>(item, new PartitionKey(item.UserId));
+            var upsertedItem = await container.UpsertItemAsync<ToDoItemModel>(item, new PartitionKey(item.UserId));
 
             return upsertedItem.StatusCode.ToString();
         }
@@ -38,7 +37,7 @@ namespace CloudTestingApp.Controllers
         {
             var container = await GetContainer();
 
-            await container.DeleteItemAsync<ToDoItem>(id, new PartitionKey(userId));
+            await container.DeleteItemAsync<ToDoItemModel>(id, new PartitionKey(userId));
 
             return;
         }
@@ -49,18 +48,18 @@ namespace CloudTestingApp.Controllers
         {
             var container = await GetContainer();
 
-            var queryable = container.GetItemLinqQueryable<ToDoItem>();
+            var queryable = container.GetItemLinqQueryable<ToDoItemModel>();
             var matches = queryable
                 .Where(p => p.UserId == userId);
 
-            using FeedIterator<ToDoItem> linqFeed = matches.ToFeedIterator();
+            using FeedIterator<ToDoItemModel> linqFeed = matches.ToFeedIterator();
 
             while (linqFeed.HasMoreResults)
             {
-                FeedResponse<ToDoItem> page = await linqFeed.ReadNextAsync();
+                FeedResponse<ToDoItemModel> page = await linqFeed.ReadNextAsync();
                 foreach (var el in page)
                 {
-                    await container.DeleteItemAsync<ToDoItem>(el.Id, new PartitionKey(el.UserId));
+                    await container.DeleteItemAsync<ToDoItemModel>(el.Id, new PartitionKey(el.UserId));
                 }
             }
 
@@ -69,21 +68,21 @@ namespace CloudTestingApp.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<List<ToDoItem>> GetAllItemsByUserId(string userId)
+        public async Task<List<ToDoItemModel>> GetAllItemsByUserId(string userId)
         {
             var container = await GetContainer();
 
-            var queryable = container.GetItemLinqQueryable<ToDoItem>();
+            var queryable = container.GetItemLinqQueryable<ToDoItemModel>();
             var matches = queryable
                 .Where(p => p.UserId == userId);
 
-            using FeedIterator<ToDoItem> linqFeed = matches.ToFeedIterator();
+            using FeedIterator<ToDoItemModel> linqFeed = matches.ToFeedIterator();
 
-            var list = new List<ToDoItem>();
+            var list = new List<ToDoItemModel>();
             while (linqFeed.HasMoreResults)
             {
-                FeedResponse<ToDoItem> page = await linqFeed.ReadNextAsync();
-                foreach(var el in page)
+                FeedResponse<ToDoItemModel> page = await linqFeed.ReadNextAsync();
+                foreach (var el in page)
                 {
                     list.Add(el);
                 }
