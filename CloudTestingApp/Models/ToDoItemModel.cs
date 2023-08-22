@@ -2,7 +2,7 @@
 
 namespace CloudTestingApp.Models
 {
-    public class ToDoItem
+    public class ToDoItemModel
     {
         [JsonProperty("id")]
         public string? Id { get; set; }
