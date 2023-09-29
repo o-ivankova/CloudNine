@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "/yA7ux00FkBRtjoeHrspx++zLi46afoa3IQmp7AHeTk=",
+  "Source": "CloudTestingApp",
+  "BasePath": "_content/CloudTestingApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "CloudTestingApp\\wwwroot",
+      "Source": "CloudTestingApp",
+      "ContentRoot": "C:\\Projects\\CloudNine\\CloudTestingApp\\wwwroot\\",
+      "BasePath": "_content/CloudTestingApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

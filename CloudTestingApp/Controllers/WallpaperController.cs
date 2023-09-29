@@ -12,13 +12,13 @@ namespace CloudTestingApp.Controllers
         private readonly WallpaperInfoService _wallpaperInfoService;
         private readonly BlobContainerClient _blobContainerClient;
 
-        public WallpaperController(WallpaperInfoService wallpaperService)
+        public WallpaperController(WallpaperInfoService wallpaperService, BlobServiceClient blobServiceClient)
         {
             _wallpaperInfoService = wallpaperService;
 
-            var blobServiceClient = new BlobServiceClient(
-               new Uri("https://ivankova1.blob.core.windows.net"),
-               new DefaultAzureCredential());
+            //var blobServiceClient = new BlobServiceClient(
+            //   new Uri("https://ivankova1.blob.core.windows.net"),
+            //   new DefaultAzureCredential());
 
             var client = blobServiceClient.GetBlobContainerClient("images");
             client.CreateIfNotExists();

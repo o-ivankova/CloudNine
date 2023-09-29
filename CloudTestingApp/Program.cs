@@ -1,5 +1,7 @@
+using Azure.Identity;
+using Azure.Storage.Queues;
 using CloudTestingApp.Services;
-using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Azure;
 
 namespace CloudTestingApp
 {
@@ -17,6 +19,31 @@ namespace CloudTestingApp
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<WallpaperInfoService, WallpaperInfoService>();
+            builder.Services.AddSingleton<ToDoItemService, ToDoItemService>();
+
+            builder.Services.AddHostedService<ToDoItemQueueService>();
+
+            builder.Services.AddAzureClients(builder =>
+            {
+                builder.AddClient<QueueClient, QueueClientOptions>((_, _, _) =>
+                {
+                    var credential = new DefaultAzureCredential();
+                    var queueUri = new Uri("https://ivankova1.queue.core.windows.net/myq");
+                    return new QueueClient(queueUri, credential);
+                });
+
+                builder.AddBlobServiceClient(new Uri("https://ivankova1.blob.core.windows.net"));
+            });
+
+            //builder.Configuration.AddAzureKeyVault(builder.Configuration["VaultUri"]);
+            var a = builder.Configuration["VaultUri"];
+            builder.Configuration.AddAzureKeyVault(
+                    vaultUri: new Uri(builder.Configuration["VaultUri"]),
+                    credential: new DefaultAzureCredential(),
+                    options: new Azure.Extensions.AspNetCore.Configuration.Secrets.AzureKeyVaultConfigurationOptions
+                    {
+                        ReloadInterval = TimeSpan.FromMinutes(5)
+                    });
 
             var app = builder.Build();
 
@@ -37,7 +64,7 @@ namespace CloudTestingApp
 
             app.Run();
 
-            
+
         }
     }
 }
